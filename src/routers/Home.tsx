@@ -1,49 +1,56 @@
-import { FaStar } from "react-icons/fa";
-import {
-  Box,
-  Grid,
-  Heading,
-  HStack,
-  Image,
-  Text,
-  VStack,
-} from "@chakra-ui/react";
+import { Grid, useEditable } from "@chakra-ui/react";
+import { useQuery } from "@tanstack/react-query";
+import { useEffect } from "react";
+import { getRooms } from "../api";
+import Room from "../components/Room";
+import RoomSkeleton from "../components/RoomSkeleton";
+import { IRoomList } from "../types";
 
 export default function Home() {
+  const { isLoading, data } = useQuery<IRoomList[]>(["rooms"], getRooms);
   return (
     <Grid
       mt={10}
-      px={40}
+      px={{
+        base: 10,
+        lg: 40,
+      }}
       columnGap={4}
       rowGap={8}
-      templateColumns={"repeat(5, 1fr)"}
+      templateColumns={{
+        sm: "1fr",
+        md: "1fr 1fr",
+        lg: "repeat(3, 1fr)",
+        xl: "repeat(4, 1fr)",
+        "2xl": "repeat(5, 1fr)",
+      }}
     >
-      <VStack alignItems={"flex-start"}>
-        <Box overflow={"hidden"} mb={3} rounded="3xl">
-          <Image
-            h="280"
-            src="https://a0.muscache.com/im/pictures/miso/Hosting-47181423/original/39c9d4e7-78d0-4807-9f0d-3029d987d02a.jpeg?im_w=720"
-          />
-        </Box>
-        <Box>
-          <Grid gap={2} templateColumns={"6fr 1fr"}>
-            <Text display={"block"} as="b" noOfLines={1} fontSize="md">
-              Cheomdangwahak-ro,Jeongeup-si, North Jeolla Province, South Korea
-            </Text>
-            <HStack spacing={1}>
-              <FaStar size={15} />
-              <Text>5.0</Text>
-            </HStack>
-          </Grid>
-          <Text fontSize={"sm"} color="gray.600">
-            Seoul, S. Korea
-          </Text>
-        </Box>
-        <Text fontSize={"sm"} color="gray.600">
-          <Text as="b">$72</Text> / night
-        </Text>
-      </VStack>
-      
+      {isLoading ? (
+        <>
+          <RoomSkeleton />
+          <RoomSkeleton />
+          <RoomSkeleton />
+          <RoomSkeleton />
+          <RoomSkeleton />
+          <RoomSkeleton />
+          <RoomSkeleton />
+          <RoomSkeleton />
+          <RoomSkeleton />
+          <RoomSkeleton />
+        </>
+      ) : null}
+      {data?.map((room) => (
+        <Room
+          key={room.pk}
+          pk={room.pk}
+          imageUrl={room.photos[0].file}
+          name={room.name}
+          rating={room.rating}
+          city={room.city}
+          country={room.country}
+          price={room.price}
+        />
+      ))}
     </Grid>
   );
 }

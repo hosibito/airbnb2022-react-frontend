@@ -1,6 +1,7 @@
 import { Button, Heading, Text, VStack } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 
+
 export default function NotFound() {
     return(
         <VStack backgroundColor={"gray.100"} justifyContent={"center"} minH="100vh">
@@ -10,7 +11,7 @@ export default function NotFound() {
                 <Button colorScheme={"red"} variant={"link"}>
                 Go home &rarr;
                 </Button>
-            </Link>
+            </Link>            
         </VStack>
     )
 }
